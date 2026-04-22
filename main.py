@@ -134,20 +134,24 @@ def home():
     with col1:
         if st.button("Elements"):
             st.session_state.state = "elements"
+            st.rerun()
 
         if st.button("Articles"):
             st.session_state.state = "articles"
+            st.rerun()
 
     with col2:
         if st.button("Quiz"):
             st.session_state.state = "quiz"
             st.session_state.current_question = generate_question()
             st.session_state.quiz_state = "question"
+            st.rerun()
 
         if st.button("Mini Game"):
             st.session_state.state = "minigame"
             st.session_state.current_question = generate_question()
             st.session_state.quiz_state = "question"
+            st.rerun()
 
 # ---------------- ELEMENTS ----------------
 def elements():
@@ -156,6 +160,7 @@ def elements():
 
     if st.button("Back"):
         st.session_state.state = "home"
+        st.rerun()
 
 # ---------------- QUIZ ----------------
 def quiz():
@@ -174,21 +179,25 @@ def quiz():
                     st.session_state.quiz_state = "correct"
                 else:
                     st.session_state.quiz_state = "wrong"
+                st.rerun()
 
     elif st.session_state.quiz_state == "correct":
         st.success("Correct")
         if st.button("Next"):
             st.session_state.current_question = generate_question()
             st.session_state.quiz_state = "question"
+            st.rerun()
 
     elif st.session_state.quiz_state == "wrong":
         st.error("Wrong")
         if st.button("Try Again"):
             st.session_state.current_question = generate_question()
             st.session_state.quiz_state = "question"
+            st.rerun()
 
     if st.button("Exit"):
         st.session_state.state = "home"
+        st.rerun()
 
 # ---------------- ARTICLES ----------------
 def articles():
@@ -201,6 +210,7 @@ def articles():
 
     if st.button("Back"):
         st.session_state.state = "home"
+        st.rerun()
 
 # ---------------- MINI GAME ----------------
 def minigame():
@@ -209,6 +219,7 @@ def minigame():
 
     if st.button("Back"):
         st.session_state.state = "home"
+        st.rerun()
 
 # ---------------- ROUTER ----------------
 if st.session_state.state == "home":
