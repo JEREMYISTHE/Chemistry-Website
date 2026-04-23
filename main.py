@@ -17,8 +17,10 @@ if "current_question" not in st.session_state:
 # ---------------- STYLE ----------------
 st.markdown("""
 <style>
-body {
-    background-color: #0f172a;
+footer {visibility: hidden;}
+
+.stApp {
+    background: linear-gradient(to bottom, #0f172a, #111827);
 }
 
 h1, h2, h3, p {
@@ -30,34 +32,35 @@ div.stButton > button {
     height: 55px;
     font-size: 16px;
     border-radius: 10px;
-}
-
-.stApp {
-    background: linear-gradient(to bottom, #0f172a, #111827);
+    background-color: #a78bfa !important;
+    color: black !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- QUIZ ----------------
+# ---------------- YOUR QUIZ QUESTIONS ----------------
+QUESTIONS = [
+    {
+        "question": "What is H2O?",
+        "options": ["Oxygen", "Hydrogen", "Water", "Carbon"],
+        "answer": 2
+    },
+    {
+        "question": "What is the atomic number of Carbon?",
+        "options": ["6", "12", "8", "4"],
+        "answer": 0
+    },
+    {
+        "question": "Which atom is most electronegative?",
+        "options": ["Oxygen", "Fluorine", "Hydrogen", "Carbon"],
+        "answer": 1
+    },
+
+    # 👉 ADD YOUR ORIGINAL QUESTIONS HERE
+]
+
 def generate_question():
-    questions = [
-        {
-            "q": "What is H2O?",
-            "options": ["Oxygen", "Hydrogen", "Water", "Carbon"],
-            "correct": 2
-        },
-        {
-            "q": "What is the atomic number of Carbon?",
-            "options": ["6", "12", "8", "4"],
-            "correct": 0
-        },
-        {
-            "q": "Which atom is most electronegative?",
-            "options": ["Oxygen", "Fluorine", "Hydrogen", "Carbon"],
-            "correct": 1
-        }
-    ]
-    return random.choice(questions)
+    return random.choice(QUESTIONS)
 
 # ---------------- ARTICLES ----------------
 ARTICLES = {
@@ -76,44 +79,6 @@ Taking is when they get something from another atom. This happens a lot to atoms
 Finally, sharing electrons is when 2 atoms decide to both use an atom of the other. This is called covalence, while giving and taking is called ionic bonding. Polar covalent bonds are a mix of the two.
 
 How much another atom wants to interact with other atoms is called electronegativity. The highest electronegative atom is Fluorine with an electronegativity of about 4.
-""",
-
-    "Atoms": """Atoms make up everything. Yes. Everything. From your hair, to your water, to your waste, atoms make them up.
-
-Atoms are extremely small and can only be seen with microscopes.
-
-Atoms contain electrons, protons, and neutrons.
-
-Protons are positive, electrons are negative, neutrons are neutral.
-
-The nucleus contains protons and neutrons, while electrons move around it.
-
-Atoms combine to form molecules like water.
-""",
-
-    "States of Matter": """Everything is matter. Matter is anything that takes up space.
-
-There are three states: solid, liquid, gas.
-
-Solids are tightly packed and fixed in shape.
-
-Liquids flow and take shape of containers.
-
-Gases move freely and expand.
-
-Heating increases movement, cooling decreases it.
-""",
-
-    "PH Scale": """The pH scale measures how acidic or basic something is.
-
-It ranges from 0 to 14.
-
-0 is acidic, 7 is neutral, 14 is basic.
-
-Examples:
-Lemon is acidic, water is neutral, soap is basic.
-
-Acids release hydrogen ions. Bases absorb them.
 """
 }
 
@@ -170,12 +135,12 @@ def quiz():
         st.session_state.current_question = generate_question()
         q = st.session_state.current_question
 
-    st.subheader(q["q"])
+    st.subheader(q["question"])
 
     if st.session_state.quiz_state == "question":
         for i, option in enumerate(q["options"]):
             if st.button(option, key=f"opt_{i}"):
-                if i == q["correct"]:
+                if i == q["answer"]:
                     st.session_state.quiz_state = "correct"
                 else:
                     st.session_state.quiz_state = "wrong"
@@ -202,11 +167,7 @@ def quiz():
 # ---------------- ARTICLES ----------------
 def articles():
     st.title("Articles")
-
-    choice = st.radio("Choose topic", list(ARTICLES.keys()))
-
-    st.markdown("---")
-    st.markdown(ARTICLES[choice])
+    st.markdown(ARTICLES["Bonding"])
 
     if st.button("Back"):
         st.session_state.state = "home"
@@ -224,15 +185,11 @@ def minigame():
 # ---------------- ROUTER ----------------
 if st.session_state.state == "home":
     home()
-
 elif st.session_state.state == "elements":
     elements()
-
 elif st.session_state.state == "quiz":
     quiz()
-
 elif st.session_state.state == "articles":
     articles()
-
 elif st.session_state.state == "minigame":
     minigame()
