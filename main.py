@@ -19,26 +19,31 @@ st.markdown("""
 <style>
 footer {visibility: hidden;}
 
+/* Background */
 .stApp {
     background: linear-gradient(to bottom, #0f172a, #111827);
 }
 
+/* Text */
 h1, h2, h3, p {
     color: white;
 }
 
+/* BUTTONS (BLACK NOW) */
 div.stButton > button {
     width: 100%;
     height: 55px;
     font-size: 16px;
     border-radius: 10px;
-    background-color: #a78bfa !important;
-    color: black !important;
+
+    background-color: black !important;
+    color: white !important;
+    border: 1px solid white;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- YOUR QUIZ QUESTIONS ----------------
+# ---------------- QUIZ ----------------
 QUESTIONS = [
     {
         "question": "What is H2O?",
@@ -54,33 +59,11 @@ QUESTIONS = [
         "question": "Which atom is most electronegative?",
         "options": ["Oxygen", "Fluorine", "Hydrogen", "Carbon"],
         "answer": 1
-    },
-
-    # 👉 ADD YOUR ORIGINAL QUESTIONS HERE
+    }
 ]
 
 def generate_question():
     return random.choice(QUESTIONS)
-
-# ---------------- ARTICLES ----------------
-ARTICLES = {
-    "Bonding": """Atoms come together at certain times. They do this so that they can complete their shells.
-
-Shells are the layers of an atom. They are what atoms want to always achieve. Any atom would love to complete their shells through other atoms. Think of atoms as people. They always want their goal. Money. To atoms, completing their shells is like winning the lottery.
-
-Atoms can complete their shells in one way. Bonding. This happens when an atom goes to another one and they do one of 3 things.
-
-Give, share, or take.
-
-Giving electrons allow them to complete their shells if they are 1 or 2 more electrons than a shell. They give other atoms electrons.
-
-Taking is when they get something from another atom. This happens a lot to atoms who are 1 or 2 electrons more than a full shell.
-
-Finally, sharing electrons is when 2 atoms decide to both use an atom of the other. This is called covalence, while giving and taking is called ionic bonding. Polar covalent bonds are a mix of the two.
-
-How much another atom wants to interact with other atoms is called electronegativity. The highest electronegative atom is Fluorine with an electronegativity of about 4.
-"""
-}
 
 # ---------------- HOME ----------------
 def home():
@@ -167,7 +150,7 @@ def quiz():
 # ---------------- ARTICLES ----------------
 def articles():
     st.title("Articles")
-    st.markdown(ARTICLES["Bonding"])
+    st.write("Add your articles back here exactly how you want them.")
 
     if st.button("Back"):
         st.session_state.state = "home"
