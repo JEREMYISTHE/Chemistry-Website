@@ -1,40 +1,32 @@
-import streamlit as st
-import random
-
-# ---------------- PAGE CONFIG ----------------
-st.set_page_config(page_title="Chemistry Cards", layout="centered")
-
-# ---------------- STATE INIT ----------------
-if "state" not in st.session_state:
-    st.session_state.state = "home"
-
-if "article_state" not in st.session_state:
-    st.session_state.article_state = "menu"
-
-if "quiz_state" not in st.session_state:
-    st.session_state.quiz_state = "question"
-
-if "current_question" not in st.session_state:
-    st.session_state.current_question = None
-
-# ---------------- STYLE ----------------
 st.markdown("""
 <style>
-/* REMOVE ONLY BOTTOM FOOTER */
-footer {visibility: hidden;}
 
-/* KEEP hamburger menu */
-header {visibility: visible;}
+/* Hide EVERYTHING at the bottom */
+[data-testid="stFooter"] {
+    display: none;
+}
 
-/* App styling */
+/* Hide GitHub icon + "Made with Streamlit" */
+[data-testid="stDecoration"] {
+    display: none;
+}
+
+/* Keep hamburger menu */
+header {
+    visibility: visible;
+}
+
+/* Background */
 .stApp {
     background: linear-gradient(to bottom, #0f172a, #111827);
 }
 
+/* Text */
 h1, h2, h3, p {
     color: white;
 }
 
+/* Buttons */
 div.stButton > button {
     width: 100%;
     height: 55px;
@@ -44,118 +36,6 @@ div.stButton > button {
     color: white !important;
     border: 1px solid white;
 }
+
 </style>
 """, unsafe_allow_html=True)
-
-# ---------------- QUIZ ----------------
-QUESTIONS = [
-    {
-        "question": "What is H2O?",
-        "options": ["Oxygen", "Hydrogen", "Water", "Carbon"],
-        "answer": 2
-    },
-    {
-        "question": "What is the atomic number of Carbon?",
-        "options": ["6", "12", "8", "4"],
-        "answer": 0
-    },
-    {
-        "question": "Which atom is most electronegative?",
-        "options": ["Oxygen", "Fluorine", "Hydrogen", "Carbon"],
-        "answer": 1
-    }
-]
-
-def generate_question():
-    return random.choice(QUESTIONS)
-
-# ---------------- ARTICLES ----------------
-ARTICLES = {
-    "a1": """Atoms come together at certain times. They do this so that they can complete their shells.
-
-Shells are the layers of an atom. They are what atoms want to always achieve. Any atom would love to complete their shells through other atoms. Think of atoms as people. They always want their goal. Money. To atoms, completing their shells is like winning the lottery.
-
-Atoms can complete their shells in one way. Bonding. This happens when an atom goes to another one and they do one of 3 things.
-
-Give, share, or take.
-
-Giving electrons allow them to complete their shells if they are 1 or 2 more electrons than a shell. They give other atoms electrons.
-
-Taking is when they get something from another atom. This happens a lot to atoms who are 1 or 2 electrons more than a full shell.
-
-Finally, sharing electrons is when 2 atoms decide to both use an atom of the other. This is called covalence, while giving and taking is called ionic bonding. Polar covalent bonds are a mix of the two.
-
-How much another atom wants to interact with other atoms is called electronegativity. The highest electronegative atom is Fluorine with an electronegativity of about 4.""",
-
-    "a2": """Atoms make up everything. Yes. Everything. From your hair, to your water, to your waste, atoms make them up.
-
-You might be wondering, why don't I see atoms? It is because atoms are so small, you can only see them with a microscope. In fact, the width of a single strand of hair is about a million times the size of a carbon atom.
-
-Atoms are made of even smaller things called electrons, protons, and neutrons. An electron gives a negative charge, a proton releases a positive charge, and the neutrons provide a neutral charge. The neutrons and protons meet in the middle, making the nucleus. The protons in the nucleus make sure the electrons stay in the atom.
-
-How do atoms make up everything? Well, they form and work together to make different things. For example, hydrogen and oxygen combine to create water. Any 2 atoms combined are called molecules. You can see the article, Bonding to see how atoms create different chemicals and substances that make up our world.""",
-
-    "a3": """Everything is matter. Water, ice, and oxygen is all matter. Matter is anything that takes up space. Matter comes in 3 ways.
-
-Liquid, solid, and gas.
-
-Liquids are anything that may still move, but will fill up a container. Think about a glass cup. The water will go in it, but not leave.
-
-Solids are solid. They may be touched and felt if still. They would be the glass in a glass cup filled with water.
-
-Finally, gases are not able to be felt. They try to be as free as they can and always try to move.
-
-Each state of matter is made up in a different way. In a solid, molecules are very compact and together.
-
-In a liquid, they are free, but don't move to much, and in a gas, they move around randomly and quickly.
-
-When atoms get cold, they move slower and condense into liquids and solids. When they get hotter, they move faster, which provides the opposite affect, making liquids and gases.""",
-
-    "a4": """The PH scale is an important scale used to measure how acidic something is. It is involved with acids and bases and everything has a PH level. Water, Soda, Lemons, they all can be measured in PH.
-
-PH is measured from 0 - 14, with 0 being acidic and 14 being a base. 7 is the neutral. Water is a 7 on the PH scale, lemon is a 2 and soap is a 12, meaning it is a base
-
-The differences between acids and bases is that acids taste sour while bases taste bitter. Also, chemically, acids release hydrogen ions while bases usually pick up the ions released.
-
-Common examples of acids include lemons, vinegar, and battery acid. Common examples of bases are soap, bleach and baking soda."""
-}
-
-# ---------------- HOME ----------------
-def home():
-    col_logo, col_title = st.columns([1, 5])
-
-    with col_logo:
-        st.image("logo.png", width=80)
-
-    with col_title:
-        st.markdown("<h1>Chemistry Cards</h1>", unsafe_allow_html=True)
-
-    st.markdown("---")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("Elements"):
-            st.session_state.state = "elements"
-            st.rerun()
-
-        if st.button("Articles"):
-            st.session_state.state = "articles"
-            st.rerun()
-
-    with col2:
-        if st.button("Quiz"):
-            st.session_state.state = "quiz"
-            st.session_state.current_question = generate_question()
-            st.session_state.quiz_state = "question"
-            st.rerun()
-
-        if st.button("Mini Game"):
-            st.session_state.state = "minigame"
-            st.session_state.current_question = generate_question()
-            st.session_state.quiz_state = "question"
-            st.rerun()
-
-# ---------------- ROUTER ----------------
-if st.session_state.state == "home":
-    home()
