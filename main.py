@@ -59,46 +59,19 @@ How much another atom wants to interact with other atoms is called electronegati
 
     "a2": """Atoms make up everything. Yes. Everything. From your hair, to your water, to your waste, atoms make them up.
 
-You might be wondering, why don't I see atoms? It is because atoms are so small, you can only see them with a microscope. In fact, the width of a single strand of hair is about a million times the size of a carbon atom.
-
-Atoms are made of even smaller things called electrons, protons, and neutrons.
+Atoms are extremely small and made of protons, neutrons, and electrons.
 
 Protons are positive, electrons are negative, neutrons are neutral.
 
-The nucleus contains protons and neutrons, while electrons move around it.
+They form the nucleus and electron cloud.
 
-Atoms combine to form molecules like water.""",
-
-    "a3": """Everything is matter. Matter is anything that takes up space.
-
-There are three states: solid, liquid, gas.
-
-Solids are tightly packed and fixed in shape.
-
-Liquids flow and take shape of containers.
-
-Gases move freely and expand.
-
-Heating increases movement, cooling decreases it.""",
-
-    "a4": """The PH scale measures how acidic or basic something is.
-
-It ranges from 0 to 14.
-
-0 is acidic, 7 is neutral, 14 is basic.
-
-Water is 7, lemon is acidic, soap is basic.
-
-Acids release hydrogen ions. Bases absorb them."""
+Atoms combine to form molecules like water."""
 }
 
 # ---------------- HOME ----------------
 def home():
     st.image("logo.png", width=120)
-
     st.title("Chemistry Cards")
-
-    st.write("Choose an option below")
 
     col1, col2 = st.columns(2)
 
@@ -124,10 +97,7 @@ def home():
 
 # ---------------- ELEMENTS ----------------
 def elements():
-    st.title("Elements Table")
-
-    st.write("Upload or display your elements image here.")
-
+    st.title("Elements")
     st.image("ELEMENTS.png", use_container_width=True)
 
     if st.button("Back"):
@@ -145,14 +115,6 @@ def articles():
 
         if st.button("Atoms"):
             st.session_state.article_state = "a2"
-            st.rerun()
-
-        if st.button("States of Matter"):
-            st.session_state.article_state = "a3"
-            st.rerun()
-
-        if st.button("PH Scale"):
-            st.session_state.article_state = "a4"
             st.rerun()
 
     else:
@@ -203,7 +165,6 @@ def quiz():
 # ---------------- MINI GAME ----------------
 def minigame():
     st.title("Mini Game")
-    st.write("Coming soon")
 
     if st.button("Back"):
         st.session_state.state = "home"
