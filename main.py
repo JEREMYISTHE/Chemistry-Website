@@ -17,7 +17,7 @@ if "quiz_state" not in st.session_state:
 if "current_question" not in st.session_state:
     st.session_state.current_question = None
 
-# ---------------- QUIZ ----------------
+# ---------------- QUIZ (UNCHANGED STRUCTURE) ----------------
 QUESTIONS = [
     {
         "question": "What is H2O?",
@@ -39,7 +39,7 @@ QUESTIONS = [
 def generate_question():
     return random.choice(QUESTIONS)
 
-# ---------------- ARTICLES ----------------
+# ---------------- ARTICLES (YOUR ORIGINAL CONTENT) ----------------
 ARTICLES = {
     "a1": """Atoms come together at certain times. They do this so that they can complete their shells.
 
@@ -59,13 +59,35 @@ How much another atom wants to interact with other atoms is called electronegati
 
     "a2": """Atoms make up everything. Yes. Everything. From your hair, to your water, to your waste, atoms make them up.
 
-Atoms are extremely small and made of protons, neutrons, and electrons.
+You might be wondering, why don't I see atoms? It is because atoms are so small, you can only see them with a microscope. In fact, the width of a single strand of hair is about a million times the size of a carbon atom.
 
-Protons are positive, electrons are negative, neutrons are neutral.
+Atoms are made of even smaller things called electrons, protons, and neutrons. An electron gives a negative charge, a proton releases a positive charge, and the neutrons provide a neutral charge. The neutrons and protons meet in the middle, making the nucleus. The protons in the nucleus make sure the electrons stay in the atom.
 
-They form the nucleus and electron cloud.
+How do atoms make up everything? Well, they form and work together to make different things. For example, hydrogen and oxygen combine to create water. Any 2 atoms combined are called molecules. You can see the article, Bonding to see how atoms create different chemicals and substances that make up our world.""",
 
-Atoms combine to form molecules like water."""
+    "a3": """Everything is matter. Water, ice, and oxygen is all matter. Matter is anything that takes up space. Matter comes in 3 ways.
+
+Liquid, solid, and gas.
+
+Liquids are anything that may still move, but will fill up a container. Think about a glass cup. The water will go in it, but not leave.
+
+Solids are solid. They may be touched and felt if still. They would be the glass in a glass cup filled with water.
+
+Finally, gases are not able to be felt. They try to be as free as they can and always try to move.
+
+Each state of matter is made up in a different way. In a solid, molecules are very compact and together.
+
+In a liquid, they are free, but don't move to much, and in a gas, they move around randomly and quickly.
+
+When atoms get cold, they move slower and condense into liquids and solids. When they get hotter, they move faster, which provides the opposite affect, making liquids and gases.""",
+
+    "a4": """The PH scale is an important scale used to measure how acidic something is. It is involved with acids and bases and everything has a PH level. Water, Soda, Lemons, they all can be measured in PH.
+
+PH is measured from 0 - 14, with 0 being acidic and 14 being a base. 7 is the neutral. Water is a 7 on the PH scale, lemon is a 2 and soap is a 12, meaning it is a base
+
+The differences between acids and bases is that acids taste sour while bases taste bitter. Also, chemically, acids release hydrogen ions while bases usually pick up the ions released.
+
+Common examples of acids include lemons, vinegar, and battery acid. Common examples of bases are soap, bleach and baking soda."""
 }
 
 # ---------------- HOME ----------------
@@ -98,6 +120,7 @@ def home():
 # ---------------- ELEMENTS ----------------
 def elements():
     st.title("Elements")
+
     st.image("ELEMENTS.png", use_container_width=True)
 
     if st.button("Back"):
@@ -115,6 +138,14 @@ def articles():
 
         if st.button("Atoms"):
             st.session_state.article_state = "a2"
+            st.rerun()
+
+        if st.button("States of Matter"):
+            st.session_state.article_state = "a3"
+            st.rerun()
+
+        if st.button("PH Scale"):
+            st.session_state.article_state = "a4"
             st.rerun()
 
     else:
