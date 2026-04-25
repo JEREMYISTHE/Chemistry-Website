@@ -17,29 +17,26 @@ if "quiz_state" not in st.session_state:
 if "current_question" not in st.session_state:
     st.session_state.current_question = None
 
-# ---------------- QUIZ (UNCHANGED STRUCTURE) ----------------
+# ---------------- QUIZ (12 QUESTIONS) ----------------
 QUESTIONS = [
-    {
-        "question": "What is H2O?",
-        "options": ["Oxygen", "Hydrogen", "Water", "Carbon"],
-        "answer": 2
-    },
-    {
-        "question": "What is the atomic number of Carbon?",
-        "options": ["6", "12", "8", "4"],
-        "answer": 0
-    },
-    {
-        "question": "Which atom is most electronegative?",
-        "options": ["Oxygen", "Fluorine", "Hydrogen", "Carbon"],
-        "answer": 1
-    }
+    {"question": "What is H2O?", "options": ["Oxygen", "Hydrogen", "Water", "Carbon"], "answer": 2},
+    {"question": "What is the atomic number of Carbon?", "options": ["6", "12", "8", "4"], "answer": 0},
+    {"question": "Which atom is most electronegative?", "options": ["Oxygen", "Fluorine", "Hydrogen", "Carbon"], "answer": 1},
+    {"question": "What charge does a proton have?", "options": ["Negative", "Positive", "Neutral", "None"], "answer": 1},
+    {"question": "What charge does an electron have?", "options": ["Positive", "Neutral", "Negative", "Mixed"], "answer": 2},
+    {"question": "Where are protons found?", "options": ["Electron cloud", "Nucleus", "Outside atom", "Shell"], "answer": 1},
+    {"question": "What is a molecule?", "options": ["One atom", "Two or more atoms bonded", "Only gases", "Only liquids"], "answer": 1},
+    {"question": "What state of matter has a fixed shape?", "options": ["Liquid", "Gas", "Solid", "Plasma"], "answer": 2},
+    {"question": "What happens when atoms share electrons?", "options": ["Ionic bond", "Covalent bond", "Break apart", "Nothing"], "answer": 1},
+    {"question": "What is the pH of pure water?", "options": ["0", "7", "14", "5"], "answer": 1},
+    {"question": "What happens when something is heated?", "options": ["Atoms slow down", "Atoms speed up", "Nothing changes", "Atoms disappear"], "answer": 1},
+    {"question": "What is an atom?", "options": ["Smallest unit of matter", "A molecule", "A liquid", "Energy"], "answer": 0}
 ]
 
 def generate_question():
     return random.choice(QUESTIONS)
 
-# ---------------- ARTICLES (YOUR ORIGINAL CONTENT) ----------------
+# ---------------- ARTICLES (UNCHANGED) ----------------
 ARTICLES = {
     "a1": """Atoms come together at certain times. They do this so that they can complete their shells.
 
@@ -117,49 +114,6 @@ def home():
             st.session_state.state = "minigame"
             st.rerun()
 
-# ---------------- ELEMENTS ----------------
-def elements():
-    st.title("Elements")
-
-    st.image("ELEMENTS.png", use_container_width=True)
-
-    if st.button("Back"):
-        st.session_state.state = "home"
-        st.rerun()
-
-# ---------------- ARTICLES ----------------
-def articles():
-    st.title("Articles")
-
-    if st.session_state.article_state == "menu":
-        if st.button("Bonding"):
-            st.session_state.article_state = "a1"
-            st.rerun()
-
-        if st.button("Atoms"):
-            st.session_state.article_state = "a2"
-            st.rerun()
-
-        if st.button("States of Matter"):
-            st.session_state.article_state = "a3"
-            st.rerun()
-
-        if st.button("PH Scale"):
-            st.session_state.article_state = "a4"
-            st.rerun()
-
-    else:
-        st.markdown(ARTICLES[st.session_state.article_state])
-
-        if st.button("Back"):
-            st.session_state.article_state = "menu"
-            st.rerun()
-
-    if st.button("Exit"):
-        st.session_state.state = "home"
-        st.session_state.article_state = "menu"
-        st.rerun()
-
 # ---------------- QUIZ ----------------
 def quiz():
     q = st.session_state.current_question
@@ -193,22 +147,8 @@ def quiz():
         st.session_state.state = "home"
         st.rerun()
 
-# ---------------- MINI GAME ----------------
-def minigame():
-    st.title("Mini Game")
-
-    if st.button("Back"):
-        st.session_state.state = "home"
-        st.rerun()
-
 # ---------------- ROUTER ----------------
 if st.session_state.state == "home":
     home()
-elif st.session_state.state == "elements":
-    elements()
-elif st.session_state.state == "articles":
-    articles()
 elif st.session_state.state == "quiz":
     quiz()
-elif st.session_state.state == "minigame":
-    minigame()
