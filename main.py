@@ -4,29 +4,18 @@ import random
 # ---------------- PAGE ----------------
 st.set_page_config(page_title="Chemistry Cards", layout="centered")
 
-# ---------------- VIDEO BACKGROUND ----------------
+# ---------------- STYLE (BLACK BACKGROUND) ----------------
 st.markdown("""
 <style>
 
-/* App base */
+/* App background */
 .stApp {
-    background: transparent;
+    background-color: black;
 }
 
-/* Fullscreen video background */
-video.bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
-
-/* Make main content readable */
+/* Make content readable on black */
 .block-container {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.92);
     padding: 2rem;
     border-radius: 10px;
 }
@@ -34,6 +23,11 @@ video.bg {
 /* Titles */
 h1, h2, h3, h4, h5, h6 {
     color: black !important;
+}
+
+/* Text */
+p {
+    color: black;
 }
 
 /* Buttons */
@@ -51,10 +45,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 </style>
-
-<video autoplay loop muted class="bg">
-  <source src="background.mp4" type="video/mp4">
-</video>
 """, unsafe_allow_html=True)
 
 # ---------------- STATE ----------------
@@ -92,32 +82,6 @@ QUESTIONS = [
 
 def generate_question():
     return random.choice(QUESTIONS)
-
-# ---------------- HOME ----------------
-def home():
-    st.image("logo.png", width=120)
-    st.title("Chemistry Cards")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("Elements"):
-            st.session_state.state = "elements"
-            st.rerun()
-        if st.button("Articles"):
-            st.session_state.state = "articles"
-            st.rerun()
-
-    with col2:
-        if st.button("Quiz"):
-            st.session_state.state = "quiz"
-            st.session_state.current_question = generate_question()
-            st.session_state.score = 0
-            st.session_state.question_count = 0
-            st.rerun()
-        if st.button("Mini Game"):
-            st.session_state.state = "minigame"
-            st.rerun()
 
 # ---------------- ARTICLES ----------------
 ARTICLES = {
@@ -170,6 +134,33 @@ The differences between acids and bases is that acids taste sour while bases tas
 Common examples of acids include lemons, vinegar, and battery acid. Common examples of bases are soap, bleach and baking soda."""
 }
 
+# ---------------- HOME ----------------
+def home():
+    st.image("logo.png", width=120)
+    st.title("Chemistry Cards")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("Elements"):
+            st.session_state.state = "elements"
+            st.rerun()
+        if st.button("Articles"):
+            st.session_state.state = "articles"
+            st.rerun()
+
+    with col2:
+        if st.button("Quiz"):
+            st.session_state.state = "quiz"
+            st.session_state.current_question = generate_question()
+            st.session_state.score = 0
+            st.session_state.question_count = 0
+            st.rerun()
+        if st.button("Mini Game"):
+            st.session_state.state = "minigame"
+            st.rerun()
+
+# ---------------- ARTICLES ----------------
 def articles():
     st.title("Articles")
 
