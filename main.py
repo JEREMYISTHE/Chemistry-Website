@@ -52,12 +52,7 @@ main {
     background: transparent !important;
 }
 
-</style>
-
-<video autoplay loop muted class="bg">
-    <source src="background.mp4" type="video/mp4">
-</video>
-""", unsafe_allow_html=True)
+""")
 
 # ---------------- STATE ----------------
 if "state" not in st.session_state:
