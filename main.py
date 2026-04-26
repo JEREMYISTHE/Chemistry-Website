@@ -1,8 +1,31 @@
 import streamlit as st
 import random
 
-# ---------------- PAGE ----------------
+# ---------------- PAGE STYLE ----------------
 st.set_page_config(page_title="Chemistry Cards", layout="centered")
+
+st.markdown("""
+<style>
+/* Background */
+body, .stApp {
+    background-color: white;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Button hover */
+.stButton > button:hover {
+    background-color: #f0f0f0;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------- STATE ----------------
 if "state" not in st.session_state:
@@ -10,9 +33,6 @@ if "state" not in st.session_state:
 
 if "article_state" not in st.session_state:
     st.session_state.article_state = "menu"
-
-if "quiz_state" not in st.session_state:
-    st.session_state.quiz_state = "question"
 
 if "current_question" not in st.session_state:
     st.session_state.current_question = None
@@ -23,7 +43,7 @@ if "score" not in st.session_state:
 if "question_count" not in st.session_state:
     st.session_state.question_count = 0
 
-# ---------------- QUESTIONS (UNCHANGED) ----------------
+# ---------------- QUESTIONS ----------------
 QUESTIONS = [
     {"q": "What is the first element?", "A": "Helium", "B": "Nitrogen", "C": "Hydrogen", "D": "Water", "correct": "C"},
     {"q": "What is H2O?", "A": "Helium", "B": "Nitrogen", "C": "Hydrogen", "D": "Water", "correct": "D"},
@@ -43,7 +63,7 @@ QUESTIONS = [
 def generate_question():
     return random.choice(QUESTIONS)
 
-# ---------------- ARTICLES (WITH LINE BREAKS RESTORED) ----------------
+# ---------------- ARTICLES ----------------
 ARTICLES = {
 "a1": """Atoms come together at certain times. They do this so that they can complete their shells.
 
@@ -150,6 +170,10 @@ def articles():
 
 # ---------------- QUIZ ----------------
 def quiz():
+    if st.button("Exit"):
+        st.session_state.state = "home"
+        st.rerun()
+
     if st.session_state.question_count >= 10:
         st.title("Finished!")
         st.write(f"Score: {st.session_state.score} / 10")
@@ -159,6 +183,7 @@ def quiz():
         return
 
     q = st.session_state.current_question
+    st.write(f"Score: {st.session_state.score} / {st.session_state.question_count}")
     st.subheader(q["q"])
 
     for option in ["A", "B", "C", "D"]:
