@@ -4,7 +4,7 @@ import random
 # ---------------- PAGE ----------------
 st.set_page_config(page_title="Chemistry Cards", layout="centered")
 
-# ---------------- STATE ----------------
+# ---------------- STATE ---------------
 if "state" not in st.session_state:
     st.session_state.state = "home"
 
