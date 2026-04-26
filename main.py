@@ -4,30 +4,39 @@ import random
 # ---------------- PAGE ----------------
 st.set_page_config(page_title="Chemistry Cards", layout="centered")
 
-# ---------------- STYLE (BLACK BACKGROUND) ----------------
+# ---------------- VIDEO BACKGROUND ----------------
 st.markdown("""
 <style>
 
-/* App background */
+/* App base */
 .stApp {
     background-color: black;
 }
 
-/* Make content readable on black */
+/* Video background */
+video.bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Ensure UI stays above video */
 .block-container {
-    background-color: rgba(255, 255, 255, 0.92);
-    padding: 2rem;
-    border-radius: 10px;
+    background: transparent !important;
 }
 
 /* Titles */
 h1, h2, h3, h4, h5, h6 {
-    color: black !important;
+    color: white !important;
 }
 
 /* Text */
 p {
-    color: black;
+    color: white;
 }
 
 /* Buttons */
@@ -39,12 +48,15 @@ p {
     font-size: 16px;
 }
 
-/* Hover */
 .stButton > button:hover {
     background-color: #f0f0f0;
 }
 
 </style>
+
+<video autoplay loop muted class="bg">
+  <source src="background.mp4" type="video/mp4">
+</video>
 """, unsafe_allow_html=True)
 
 # ---------------- STATE ----------------
