@@ -4,56 +4,6 @@ import random
 # ---------------- PAGE ----------------
 st.set_page_config(page_title="Chemistry Cards", layout="centered")
 
-# ---------------- BACKGROUND (VIDEO + FIXED UI) ----------------
-st.markdown("""
-<style>
-
-/* Background video */
-video.bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    z-index: -1;
-}
-
-/* Remove Streamlit white box */
-.block-container {
-    background: transparent !important;
-}
-
-/* Global background fallback */
-.stApp {
-    background-color: black;
-}
-
-/* TEXT */
-h1, h2, h3, p {
-    color: white !important;
-}
-
-/* BUTTONS (FORCED BLACK) */
-.stButton > button {
-    background-color: black !important;
-    color: white !important;
-    border: 2px solid white !important;
-    padding: 10px;
-    font-size: 16px;
-}
-
-.stButton > button:hover {
-    background-color: #222 !important;
-}
-
-</style>
-
-<video autoplay loop muted class="bg">
-    <source src="background.mp4" type="video/mp4">
-</video>
-""", unsafe_allow_html=True)
-
 # ---------------- STATE ----------------
 if "state" not in st.session_state:
     st.session_state.state = "home"
@@ -61,32 +11,36 @@ if "state" not in st.session_state:
 if "article_state" not in st.session_state:
     st.session_state.article_state = "menu"
 
-if "question_index" not in st.session_state:
-    st.session_state.question_index = 0
+if "current_question" not in st.session_state:
+    st.session_state.current_question = None
 
 if "score" not in st.session_state:
     st.session_state.score = 0
 
-# ---------------- QUESTIONS (YOUR ORIGINAL SET KEPT) ----------------
+if "question_count" not in st.session_state:
+    st.session_state.question_count = 0
+
+# ---------------- QUESTIONS (UNCHANGED) ----------------
 QUESTIONS = [
     {"q": "What is the first element?", "A": "Helium", "B": "Nitrogen", "C": "Hydrogen", "D": "Water", "correct": "C"},
     {"q": "What is H2O?", "A": "Helium", "B": "Nitrogen", "C": "Hydrogen", "D": "Water", "correct": "D"},
     {"q": "Which gas is in a balloon?", "A": "Helium", "B": "Nitrogen", "C": "Hydrogen", "D": "Water", "correct": "A"},
+    {"q": "Which is NOT in an atom?", "A": "Proton", "B": "Nucleus", "C": "Electron", "D": "Hydrogen", "correct": "D"},
     {"q": "What is CO2?", "A": "Hydrogen", "B": "Carbon Dioxide", "C": "Water", "D": "Carbon Monoxide", "correct": "B"},
-    {"q": "What is the charge of an electron?", "A": "Positive", "B": "Negative", "C": "Neutral", "D": "None", "correct": "B"},
-    {"q": "How many elements are there?", "A": "100", "B": "118", "C": "12", "D": "None", "correct": "B"},
-    {"q": "What is bonding?", "A": "Atoms joining", "B": "Breaking", "C": "Heating", "D": "Freezing", "correct": "A"},
-    {"q": "What is oxygen?", "A": "O", "B": "H", "C": "C", "D": "Na", "correct": "A"},
-    {"q": "What is water made of?", "A": "CO2", "B": "H2O", "C": "O2", "D": "NaCl", "correct": "B"},
-    {"q": "Which is a noble gas?", "A": "Oxygen", "B": "Helium", "C": "Hydrogen", "D": "Sodium", "correct": "B"},
+    {"q": "What is the highest electronegative element?", "A": "Hydrogen", "B": "Oxygen", "C": "Fluorine", "D": "Neon", "correct": "C"},
+    {"q": "Which is NOT a type of bonding?", "A": "Covalent", "B": "Ionic", "C": "Polar Covalent", "D": "Calcic", "correct": "D"},
+    {"q": "How many elements are there?", "A": "100", "B": "12", "C": "118", "D": "None of the others", "correct": "C"},
+    {"q": "What is the charge of an electron?", "A": "Positive", "B": "Negative", "C": "Neutral", "D": "None of the others", "correct": "B"},
+    {"q": "Which of these is not part of the first 10 elements?", "A": "Helium", "B": "Calcium", "C": "Boron", "D": "Lithium", "correct": "B"},
+    {"q": "Which of these has exactly two shells?", "A": "Hydrogen", "B": "Mercury", "C": "Oxygen", "D": "Einsteinium", "correct": "C"},
+    {"q": "Which of these isn't a group?", "A": "Calcimites", "B": "Transition Metals", "C": "Actinoids", "D": "Lanthanides", "correct": "A"},
+    {"q": "What are multiple atoms combined together called?", "A": "Electron", "B": "Nucleus", "C": "Molecule", "D": "Solid", "correct": "C"},
 ]
 
-def next_question():
-    st.session_state.question_index = (st.session_state.question_index + 1) % len(QUESTIONS)
+def generate_question():
+    return random.choice(QUESTIONS)
 
-q = QUESTIONS[st.session_state.question_index]
-
-# ---------------- ARTICLES (UNCHANGED CONTENT) ----------------
+# ---------------- ARTICLES (FULL + FORMATTED) ----------------
 ARTICLES = {
 "a1": """Atoms come together at certain times. They do this so that they can complete their shells.
 
@@ -102,39 +56,39 @@ Taking is when they get something from another atom. This happens a lot to atoms
 
 Finally, sharing electrons is when 2 atoms decide to both use an atom of the other. This is called covalence, while giving and taking is called ionic bonding. Polar covalent bonds are a mix of the two.
 
-Electronegativity is how much atoms attract electrons. Fluorine is highest.""",
+How much another atom wants to interact with other atoms is called electronegativity. The highest electronegative atom is Fluorine with an electronegativity of about 4.""",
 
-"a2": """Atoms make up everything. From your hair to water to air.
+"a2": """Atoms make up everything. Yes. Everything. From your hair, to your water, to your waste, atoms make them up.
 
-Atoms are extremely small and made of electrons, protons, and neutrons.
+You might be wondering, why don't I see atoms? It is because atoms are so small, you can only see them with a microscope. In fact, the width of a single strand of hair is about a million times the size of a carbon atom.
 
-Protons are positive, electrons are negative, neutrons are neutral.
+Atoms are made of even smaller things called electrons, protons, and neutrons. An electron gives a negative charge, a proton releases a positive charge, and the neutrons provide a neutral charge. The neutrons and protons meet in the middle, making the nucleus. The protons in the nucleus make sure the electrons stay in the atom.
 
-They form a nucleus in the center.
+How do atoms make up everything? Well, they form and work together to make different things. For example, hydrogen and oxygen combine to create water. Any 2 atoms combined are called molecules. You can see the article, Bonding to see how atoms create different chemicals and substances that make up our world.""",
 
-Atoms combine to form molecules like water (H2O).""",
+"a3": """Everything is matter. Water, ice, and oxygen is all matter. Matter is anything that takes up space. Matter comes in 3 ways.
 
-"a3": """Matter is anything that takes up space.
+Liquid, solid, and gas.
 
-It exists as solid, liquid, or gas.
+Liquids are anything that may still move, but will fill up a container. Think about a glass cup. The water will go in it, but not leave.
 
-Solids are tightly packed.
+Solids are solid. They may be touched and felt if still. They would be the glass in a glass cup filled with water.
 
-Liquids flow but stay in a container.
+Finally, gases are not able to be felt. They try to be as free as they can and always try to move.
 
-Gases move freely.
+Each state of matter is made up in a different way. In a solid, molecules are very compact and together.
 
-Temperature affects movement of particles.""",
+In a liquid, they are free, but don't move to much, and in a gas, they move around randomly and quickly.
 
-"a4": """The pH scale measures acidity.
+When atoms get cold, they move slower and condense into liquids and solids. When they get hotter, they move faster, which provides the opposite affect, making liquids and gases.""",
 
-It goes from 0 to 14.
+"a4": """The PH scale is an important scale used to measure how acidic something is. It is involved with acids and bases and everything has a PH level. Water, Soda, Lemons, they all can be measured in PH.
 
-0 is acidic, 14 is basic, 7 is neutral.
+PH is measured from 0 - 14, with 0 being acidic and 14 being a base. 7 is the neutral. Water is a 7 on the PH scale, lemon is a 2 and soap is a 12, meaning it is a base.
 
-Lemon is acidic, water is neutral, soap is basic.
+The differences between acids and bases is that acids taste sour while bases taste bitter. Also, chemically, acids release hydrogen ions while bases usually pick up the ions released.
 
-Acids release hydrogen ions, bases absorb them."""
+Common examples of acids include lemons, vinegar, and battery acid. Common examples of bases are soap, bleach and baking soda."""
 }
 
 # ---------------- HOME ----------------
@@ -142,17 +96,26 @@ def home():
     st.image("logo.png", width=120)
     st.title("Chemistry Cards")
 
-    if st.button("Elements"):
-        st.session_state.state = "elements"
+    col1, col2 = st.columns(2)
 
-    if st.button("Articles"):
-        st.session_state.state = "articles"
+    with col1:
+        if st.button("Elements"):
+            st.session_state.state = "elements"
+            st.rerun()
+        if st.button("Articles"):
+            st.session_state.state = "articles"
+            st.rerun()
 
-    if st.button("Quiz"):
-        st.session_state.state = "quiz"
-
-    if st.button("Minigame"):
-        st.session_state.state = "minigame"
+    with col2:
+        if st.button("Quiz"):
+            st.session_state.state = "quiz"
+            st.session_state.current_question = generate_question()
+            st.session_state.score = 0
+            st.session_state.question_count = 0
+            st.rerun()
+        if st.button("Mini Game"):
+            st.session_state.state = "minigame"
+            st.rerun()
 
 # ---------------- ARTICLES ----------------
 def articles():
@@ -161,52 +124,56 @@ def articles():
     if st.session_state.article_state == "menu":
         if st.button("Bonding"):
             st.session_state.article_state = "a1"
+            st.rerun()
         if st.button("Atoms"):
             st.session_state.article_state = "a2"
+            st.rerun()
         if st.button("States of Matter"):
             st.session_state.article_state = "a3"
-        if st.button("pH Scale"):
+            st.rerun()
+        if st.button("PH Scale"):
             st.session_state.article_state = "a4"
+            st.rerun()
     else:
-        st.write(ARTICLES[st.session_state.article_state])
+        st.markdown(ARTICLES[st.session_state.article_state])
         if st.button("Back"):
             st.session_state.article_state = "menu"
+            st.rerun()
 
     if st.button("Exit"):
         st.session_state.state = "home"
+        st.session_state.article_state = "menu"
+        st.rerun()
 
 # ---------------- QUIZ ----------------
 def quiz():
-    st.title("Quiz")
+    if st.button("Exit"):
+        st.session_state.state = "home"
+        st.rerun()
 
-    st.write(q["q"])
+    if st.session_state.question_count >= 10:
+        st.title("Finished!")
+        st.write(f"Score: {st.session_state.score} / 10")
+        if st.button("Home"):
+            st.session_state.state = "home"
+            st.rerun()
+        return
 
-    for opt in ["A", "B", "C", "D"]:
-        if st.button(q[opt]):
-            if opt == q["correct"]:
+    q = st.session_state.current_question
+    st.write(f"Score: {st.session_state.score} / {st.session_state.question_count}")
+    st.subheader(q["q"])
+
+    for option in ["A", "B", "C", "D"]:
+        if st.button(q[option]):
+            if option == q["correct"]:
                 st.session_state.score += 1
-            next_question()
+                st.success("Correct!")
+            else:
+                st.error("Incorrect!")
 
-    st.write(f"Score: {st.session_state.score}")
-
-    if st.button("Exit"):
-        st.session_state.state = "home"
-
-# ---------------- ELEMENTS ----------------
-def elements():
-    st.title("Elements Table")
-    st.write("Placeholder for periodic table")
-
-    if st.button("Exit"):
-        st.session_state.state = "home"
-
-# ---------------- MINIGAME ----------------
-def minigame():
-    st.title("Minigame")
-    st.write("Placeholder for animation game")
-
-    if st.button("Exit"):
-        st.session_state.state = "home"
+            st.session_state.question_count += 1
+            st.session_state.current_question = generate_question()
+            st.rerun()
 
 # ---------------- ROUTER ----------------
 if st.session_state.state == "home":
@@ -215,7 +182,3 @@ elif st.session_state.state == "articles":
     articles()
 elif st.session_state.state == "quiz":
     quiz()
-elif st.session_state.state == "elements":
-    elements()
-elif st.session_state.state == "minigame":
-    minigame()
