@@ -1,14 +1,39 @@
 import streamlit as st
 import random
 
-# ---------------- PAGE STYLE ----------------
+# ---------------- PAGE ----------------
 st.set_page_config(page_title="Chemistry Cards", layout="centered")
 
+# ---------------- VIDEO BACKGROUND ----------------
 st.markdown("""
 <style>
-/* Background */
-body, .stApp {
-    background-color: white;
+
+/* App base */
+.stApp {
+    background: transparent;
+}
+
+/* Fullscreen video background */
+video.bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Make main content readable */
+.block-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+/* Titles */
+h1, h2, h3, h4, h5, h6 {
+    color: black !important;
 }
 
 /* Buttons */
@@ -20,11 +45,16 @@ body, .stApp {
     font-size: 16px;
 }
 
-/* Button hover */
+/* Hover */
 .stButton > button:hover {
     background-color: #f0f0f0;
 }
+
 </style>
+
+<video autoplay loop muted class="bg">
+  <source src="background.mp4" type="video/mp4">
+</video>
 """, unsafe_allow_html=True)
 
 # ---------------- STATE ----------------
@@ -62,6 +92,32 @@ QUESTIONS = [
 
 def generate_question():
     return random.choice(QUESTIONS)
+
+# ---------------- HOME ----------------
+def home():
+    st.image("logo.png", width=120)
+    st.title("Chemistry Cards")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("Elements"):
+            st.session_state.state = "elements"
+            st.rerun()
+        if st.button("Articles"):
+            st.session_state.state = "articles"
+            st.rerun()
+
+    with col2:
+        if st.button("Quiz"):
+            st.session_state.state = "quiz"
+            st.session_state.current_question = generate_question()
+            st.session_state.score = 0
+            st.session_state.question_count = 0
+            st.rerun()
+        if st.button("Mini Game"):
+            st.session_state.state = "minigame"
+            st.rerun()
 
 # ---------------- ARTICLES ----------------
 ARTICLES = {
@@ -114,33 +170,6 @@ The differences between acids and bases is that acids taste sour while bases tas
 Common examples of acids include lemons, vinegar, and battery acid. Common examples of bases are soap, bleach and baking soda."""
 }
 
-# ---------------- HOME ----------------
-def home():
-    st.image("logo.png", width=120)
-    st.title("Chemistry Cards")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("Elements"):
-            st.session_state.state = "elements"
-            st.rerun()
-        if st.button("Articles"):
-            st.session_state.state = "articles"
-            st.rerun()
-
-    with col2:
-        if st.button("Quiz"):
-            st.session_state.state = "quiz"
-            st.session_state.current_question = generate_question()
-            st.session_state.score = 0
-            st.session_state.question_count = 0
-            st.rerun()
-        if st.button("Mini Game"):
-            st.session_state.state = "minigame"
-            st.rerun()
-
-# ---------------- ARTICLES ----------------
 def articles():
     st.title("Articles")
 
@@ -174,15 +203,8 @@ def quiz():
         st.session_state.state = "home"
         st.rerun()
 
-    if st.session_state.question_count >= 10:
-        st.title("Finished!")
-        st.write(f"Score: {st.session_state.score} / 10")
-        if st.button("Home"):
-            st.session_state.state = "home"
-            st.rerun()
-        return
-
     q = st.session_state.current_question
+    st.title("Quiz")
     st.write(f"Score: {st.session_state.score} / {st.session_state.question_count}")
     st.subheader(q["q"])
 
@@ -190,10 +212,6 @@ def quiz():
         if st.button(q[option]):
             if option == q["correct"]:
                 st.session_state.score += 1
-                st.success("Correct!")
-            else:
-                st.error("Incorrect!")
-
             st.session_state.question_count += 1
             st.session_state.current_question = generate_question()
             st.rerun()
